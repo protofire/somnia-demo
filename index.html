@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Counter Demo</title>
+    
+    <!-- External Libraries -->
+    <script src="https://unpkg.com/web3@1.10.4/dist/web3.min.js"></script>
+    
+    <!-- Application Modules -->
+    <script src="js/config.js"></script>
+    <script src="js/wallet.js"></script>
+    <script src="js/app.js"></script>
+    
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            max-width: 600px; 
+            margin: 50px auto; 
+            padding: 20px; 
+            text-align: center;
+        }
+        .container { 
+            border: 1px solid #ccc; 
+            padding: 30px; 
+            border-radius: 8px; 
+        }
+        #counter { 
+            font-size: 48px; 
+            font-weight: bold; 
+            margin: 20px 0; 
+            color: #333; 
+        }
+        button { 
+            font-size: 18px; 
+            padding: 12px 24px; 
+            margin: 10px; 
+            cursor: pointer; 
+            border: none; 
+            border-radius: 4px; 
+        }
+        #connectBtn { 
+            background-color: #007bff; 
+            color: white; 
+        }
+        #incrementBtn { 
+            background-color: #28a745; 
+            color: white; 
+        }
+        #incrementBtn:disabled { 
+            background-color: #6c757d; 
+            cursor: not-allowed; 
+        }
+        .wallet-info { 
+            margin: 20px 0; 
+            font-size: 14px; 
+            color: #666; 
+        }
+        .nav { 
+            margin-bottom: 30px; 
+        }
+        .nav a { 
+            margin: 0 10px; 
+            text-decoration: none; 
+            color: #007bff; 
+        }
+        #status {
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 4px;
+            min-height: 20px;
+        }
+        .success { background-color: #d4edda; color: #155724; }
+        .error { background-color: #f8d7da; color: #721c24; }
+        .info { background-color: #d1ecf1; color: #0c5460; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="nav">
+            <a href="/">Counter</a>
+            <a href="/leaderboard">Leaderboard</a>
+        </div>
+        
+        <h1>Counter Demo</h1>
+        
+        <div class="wallet-info">
+            <div id="walletStatus">Please connect your wallet</div>
+            <div id="walletAddress"></div>
+        </div>
+        
+        <button id="connectBtn">Connect Wallet</button>
+        
+        <div id="counter">0</div>
+        
+        <button id="incrementBtn" disabled>Increment Counter</button>
+        
+        <div id="status"></div>
+    </div>
+</body>
+</html> 

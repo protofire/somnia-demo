@@ -39,16 +39,18 @@ app.use(cors({
 }));
 
 app.use(express.json());
-app.use(express.static('public'));
+
+// Serve static files from root directory
+app.use(express.static('.'));
 
 // Serve the main counter page
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+    res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 // Serve the leaderboard page
 app.get('/leaderboard', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'leaderboard.html'));
+    res.sendFile(path.join(__dirname, 'leaderboard.html'));
 });
 
 // API endpoint to get leaderboard data from subgraph
