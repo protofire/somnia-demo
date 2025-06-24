@@ -4,7 +4,7 @@ schema:
 dataSources:
   - kind: ethereum
     name: Counter
-    network: mainnet  # Change this to your target network (e.g., polygon, goerli, etc.)
+    network: somnia-testnet  # Updated to match your configuration
     source:
       address: "0x49E389D79401D404cd4FBA55CC831a8224A0C277"  # Update this with your deployed contract address
       abi: Counter
