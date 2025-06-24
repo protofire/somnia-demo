@@ -1,15 +1,45 @@
+# ==============================================================================
+# GRAPHQL SCHEMA - DATA ENTITIES DEFINITION
+# ==============================================================================
+# This file defines the structure of data that will be stored and made queryable
+# through The Graph Protocol. Think of these as database tables that can be
+# queried using GraphQL.
+#
+# The subgraph will automatically create these entities when processing
+# blockchain events from the Counter smart contract.
+# ==============================================================================
+
+# User Entity
+# Represents a unique user who has interacted with the Counter contract
+# Each user has their own counter that they can increment
 type User @entity {
-  id: ID!  # user address
-  count: BigInt!
-  lastUpdated: BigInt!
-  increments: [CounterIncrement!]! @derivedFrom(field: "user")
+  id: ID!                                    # Primary key: user's wallet address (e.g., "0x123...")
+  count: BigInt!                            # Current counter value for this user
+  lastUpdated: BigInt!                      # Timestamp of when this user last incremented their counter
+  increments: [CounterIncrement!]! @derivedFrom(field: "user")  # List of all increment actions by this user
 }
 
+# CounterIncrement Entity  
+# Represents a single increment action performed by a user
+# This creates a historical record of every increment that has ever happened
 type CounterIncrement @entity {
-  id: ID!  # transaction hash + log index
-  user: User!
-  newCount: BigInt!
-  timestamp: BigInt!
-  blockNumber: BigInt!
-  transactionHash: Bytes!
-} 
+  id: ID!                    # Primary key: unique identifier (transaction hash + log index)
+  user: User!               # Reference to the User who performed this increment
+  newCount: BigInt!         # What the counter value became after this increment
+  timestamp: BigInt!        # When this increment happened (blockchain timestamp)
+  blockNumber: BigInt!      # Which block this increment was included in
+  transactionHash: Bytes!   # The transaction hash where this increment occurred
+}
+
+# ==============================================================================
+# HOW TO QUERY THIS DATA:
+# 
+# Get all users and their current counts:
+# query { users { id count lastUpdated } }
+#
+# Get recent increments:
+# query { counterIncrements(orderBy: timestamp, orderDirection: desc) { user { id } newCount timestamp } }
+#
+# Get specific user's history:
+# query { user(id: "0x...") { count increments { newCount timestamp } } }
+# ============================================================================== 

@@ -1,25 +1,57 @@
-specVersion: 0.0.5
+# ==============================================================================
+# SUBGRAPH CONFIGURATION FILE
+# ==============================================================================
+# This file configures how The Graph Protocol indexes your smart contract events
+# Think of it as the "blueprint" that tells the indexer:
+# - Which blockchain network to watch
+# - Which smart contract to monitor
+# - Which events to capture and process
+# - How to transform blockchain data into queryable entities
+# ==============================================================================
+
+specVersion: 0.0.5  # Version of the subgraph manifest specification
+
+# Schema Definition
+# Points to the GraphQL schema that defines what data entities we want to track
 schema:
   file: ./schema.graphql
+
+# Data Sources Configuration
+# This section defines which smart contracts we want to index
 dataSources:
-  - kind: ethereum
-    name: Counter
-    network: somnia-testnet  # Updated to match your configuration
+  - kind: ethereum                    # We're indexing an Ethereum-compatible blockchain
+    name: Counter                     # Internal name for this data source
+    network: somnia-testnet          # The blockchain network (Somnia testnet in this case)
+    
+    # Smart Contract Details
     source:
-      address: "0x49E389D79401D404cd4FBA55CC831a8224A0C277"  # Update this with your deployed contract address
-      abi: Counter
-      startBlock: 106473529  # Update this with the block where your contract was deployed
+      address: "0x49E389D79401D404cd4FBA55CC831a8224A0C277"  # The deployed Counter contract address
+      abi: Counter                   # Reference to the ABI (Application Binary Interface)
+      startBlock: 106473529          # Block number where indexing should start (when contract was deployed)
+    
+    # Mapping Configuration
+    # This section tells the subgraph how to process blockchain events
     mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.7
-      language: wasm/assemblyscript
+      kind: ethereum/events          # We're processing Ethereum events
+      apiVersion: 0.0.7             # Version of the mapping API
+      language: wasm/assemblyscript  # Programming language for the mapping logic
+      
+      # Entities that will be created/updated when processing events
       entities:
-        - User
-        - CounterIncrement
+        - User                       # Tracks individual users and their counter values
+        - CounterIncrement          # Tracks each individual increment action
+      
+      # ABI Files
+      # The contract's ABI defines the contract's interface (functions, events, etc.)
       abis:
         - name: Counter
           file: ./abis/Counter.json
+      
+      # Event Handlers
+      # Maps blockchain events to handler functions that process the data
       eventHandlers:
-        - event: CounterIncremented(indexed address,uint256,uint256)
-          handler: handleCounterIncremented
-      file: ./src/mapping.ts 
+        - event: CounterIncremented(indexed address,uint256,uint256)  # Event signature from the smart contract
+          handler: handleCounterIncremented                           # Function that processes this event
+      
+      # Mapping Logic File
+      file: ./src/mapping.ts         # TypeScript file containing the event processing logic 
