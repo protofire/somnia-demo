@@ -3,18 +3,18 @@ const cors = require('cors');
 const path = require('path');
 const axios = require('axios');
 
-// Load configuration (same as app.js for consistency)
-const config = require('../config.example'); // Change to ../config.js when you create it
-
 const app = express();
 
-// Contract configuration from config (with env variable override for Vercel)
-const CONTRACT_ADDRESS = process.env.CONTRACT_ADDRESS || config.contractAddress;
-const SUBGRAPH_URL = process.env.SUBGRAPH_URL || config.subgraphUrl;
-const NETWORK = process.env.NETWORK || config.network;
+// Configuration for Vercel (environment variables only)
+const CONTRACT_ADDRESS = process.env.CONTRACT_ADDRESS || '0x49E389D79401D404cd4FBA55CC831a8224A0C277';
+const SUBGRAPH_URL = process.env.SUBGRAPH_URL || 'http://localhost:8000/subgraphs/name/counter-subgraph';
+const NETWORK = process.env.NETWORK || 'somnia-testnet';
 
 // CORS configuration
-app.use(cors(config.cors));
+app.use(cors({
+  origin: ['http://localhost:3000', 'https://*.vercel.app'],
+  credentials: true
+}));
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, '../public')));

@@ -59,11 +59,18 @@ Visit `http://localhost:3000` to use the counter app.
 2. **Increment Counter**: Click "Increment Counter" to send a transaction and increase your count
 3. **View Leaderboard**: Navigate to `/leaderboard` to see all users and their counters
 
-## Environment Variables
+## Configuration
 
+### Local Development
+1. Copy `config.example.js` to `config.js`
+2. Update `config.js` with your contract address and settings
+3. Run `npm run dev`
+
+### Production (Vercel)
+Set environment variables in Vercel dashboard:
 - `CONTRACT_ADDRESS`: Deployed contract address
 - `SUBGRAPH_URL`: URL of your deployed subgraph endpoint
-- `PORT`: Server port (default: 3000)
+- `NETWORK`: Target network (default: somnia-testnet)
 
 ## Network Configuration
 

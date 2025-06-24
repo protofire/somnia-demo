@@ -12,3 +12,6 @@ node_modules
 yarn.lock
 package-lock.json
 subgraph/build
+
+# Generated files
+public/index-old.html
