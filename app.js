@@ -43,6 +43,19 @@ app.use(express.json());
 // Serve static files from root directory
 app.use(express.static('.'));
 
+// Explicit routes for JS files to ensure correct MIME types
+app.get('/js/:filename', (req, res) => {
+    const filename = req.params.filename;
+    const filePath = path.join(__dirname, 'js', filename);
+    
+    if (fs.existsSync(filePath)) {
+        res.setHeader('Content-Type', 'application/javascript');
+        res.sendFile(filePath);
+    } else {
+        res.status(404).send('File not found');
+    }
+});
+
 // Serve the main counter page
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
