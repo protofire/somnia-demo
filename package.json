@@ -1,0 +1,19 @@
+{
+  "name": "somnia-demo",
+  "version": "1.0.0",
+  "description": "Simple counter demo with wallet integration",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "web3": "^4.3.0",
+    "cors": "^2.8.5",
+    "axios": "^1.6.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  }
+} 

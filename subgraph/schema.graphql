@@ -1,0 +1,15 @@
+type User @entity {
+  id: ID!  # user address
+  count: BigInt!
+  lastUpdated: BigInt!
+  increments: [CounterIncrement!]! @derivedFrom(field: "user")
+}
+
+type CounterIncrement @entity {
+  id: ID!  # transaction hash + log index
+  user: User!
+  newCount: BigInt!
+  timestamp: BigInt!
+  blockNumber: BigInt!
+  transactionHash: Bytes!
+} 

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leaderboard - Counter Demo</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            max-width: 800px; 
+            margin: 50px auto; 
+            padding: 20px; 
+        }
+        .container { 
+            border: 1px solid #ccc; 
+            padding: 30px; 
+            border-radius: 8px; 
+        }
+        .nav { 
+            margin-bottom: 30px; 
+            text-align: center; 
+        }
+        .nav a { 
+            margin: 0 10px; 
+            text-decoration: none; 
+            color: #007bff; 
+        }
+        table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            margin-top: 20px; 
+        }
+        th, td { 
+            border: 1px solid #ddd; 
+            padding: 12px; 
+            text-align: left; 
+        }
+        th { 
+            background-color: #f2f2f2; 
+        }
+        .rank { 
+            font-weight: bold; 
+            text-align: center; 
+        }
+        .address { 
+            font-family: monospace; 
+            font-size: 14px; 
+        }
+        .count { 
+            font-weight: bold; 
+            text-align: center; 
+        }
+        .loading { 
+            text-align: center; 
+            padding: 20px; 
+        }
+        .error { 
+            color: red; 
+            text-align: center; 
+            padding: 20px; 
+        }
+        .refresh-btn { 
+            background-color: #007bff; 
+            color: white; 
+            border: none; 
+            padding: 10px 20px; 
+            border-radius: 4px; 
+            cursor: pointer; 
+            margin-bottom: 20px; 
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="nav">
+            <a href="/">Counter</a>
+            <a href="/leaderboard">Leaderboard</a>
+        </div>
+        
+        <h1>Leaderboard</h1>
+        
+        <button class="refresh-btn" onclick="loadLeaderboard()">Refresh</button>
+        
+        <div id="content">
+            <div class="loading">Loading leaderboard...</div>
+        </div>
+    </div>
+
+    <script>
+        async function loadLeaderboard() {
+            const contentDiv = document.getElementById('content');
+            contentDiv.innerHTML = '<div class="loading">Loading leaderboard...</div>';
+            
+            try {
+                const response = await fetch('/api/leaderboard');
+                
+                if (!response.ok) {
+                    throw new Error('Failed to fetch leaderboard data');
+                }
+                
+                const users = await response.json();
+                
+                if (users.length === 0) {
+                    contentDiv.innerHTML = '<div class="loading">No users found. Start using the counter to appear on the leaderboard!</div>';
+                    return;
+                }
+                
+                let html = `
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Rank</th>
+                                <th>Address</th>
+                                <th>Count</th>
+                                <th>Last Updated</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                `;
+                
+                users.forEach((user, index) => {
+                    const lastUpdated = user.lastUpdated ? 
+                        new Date(parseInt(user.lastUpdated) * 1000).toLocaleString() : 
+                        'Unknown';
+                    
+                    html += `
+                        <tr>
+                            <td class="rank">${index + 1}</td>
+                            <td class="address">${user.id}</td>
+                            <td class="count">${user.count}</td>
+                            <td>${lastUpdated}</td>
+                        </tr>
+                    `;
+                });
+                
+                html += `
+                        </tbody>
+                    </table>
+                `;
+                
+                contentDiv.innerHTML = html;
+                
+            } catch (error) {
+                console.error('Error loading leaderboard:', error);
+                contentDiv.innerHTML = '<div class="error">Error loading leaderboard. Please try again.</div>';
+            }
+        }
+
+        // Load leaderboard when page loads
+        window.addEventListener('load', loadLeaderboard);
+        
+        // Auto-refresh every 30 seconds
+        setInterval(loadLeaderboard, 30000);
+    </script>
+</body>
+</html> 
