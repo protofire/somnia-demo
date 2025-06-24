@@ -1,88 +1,105 @@
 # Somnia Counter Demo
 
-A simple blockchain demo application with wallet integration, smart contract interaction, and a subgraph for data indexing.
+A simple counter demo application with wallet integration, built for the Somnia blockchain network.
 
-## Components
+## Features
 
-1. **Node.js App** - Simple web interface with wallet connection and counter functionality
-2. **Smart Contract** - Solidity contract that tracks user counters
-3. **Subgraph** - Indexes contract events for efficient querying
+- 🔗 **Web3 Wallet Integration**: Connect with MetaMask or other Web3 wallets
+- 📊 **Smart Contract Interaction**: Increment counter on Somnia testnet
+- 🏆 **Leaderboard**: View top users via The Graph subgraph
+- 🚀 **Modern Stack**: Express.js backend + vanilla JS frontend
+- ☁️ **Vercel Ready**: Optimized for serverless deployment
 
-## Quick Setup
-
-### 1. Install Dependencies
-
-```bash
-npm install
-cd subgraph && npm install && cd ..
-```
-
-### 2. Deploy Smart Contract
-
-1. Compile and deploy the `contracts/Counter.sol` contract to your target network
-2. Update the contract address in:
-   - `public/index.html` (line ~89: `CONTRACT_ADDRESS`)
-   - `app.js` (line ~12: `CONTRACT_ADDRESS`)
-   - `subgraph/subgraph.yaml` (line ~8: contract address)
-
-### 3. Setup Subgraph
-
-1. Create the ABI file:
-```bash
-mkdir -p subgraph/abis
-# Copy your compiled contract ABI to subgraph/abis/Counter.json
-```
-
-2. Update subgraph configuration:
-   - Edit `subgraph/subgraph.yaml` with your contract address and network
-   - Update the `startBlock` with the deployment block number
-
-3. Deploy subgraph:
-```bash
-cd subgraph
-npm run codegen
-npm run build
-npm run deploy-local  # or deploy to The Graph hosted service
-```
-
-### 4. Run the Application
-
-```bash
-npm start
-```
-
-Visit `http://localhost:3000` to use the counter app.
-
-## Usage
-
-1. **Connect Wallet**: Click "Connect Wallet" to connect MetaMask or another Web3 wallet
-2. **Increment Counter**: Click "Increment Counter" to send a transaction and increase your count
-3. **View Leaderboard**: Navigate to `/leaderboard` to see all users and their counters
-
-## Configuration
+## Quick Start
 
 ### Local Development
-1. Copy `config.example.js` to `config.js`
-2. Update `config.js` with your contract address and settings
-3. Run `npm run dev`
 
-### Production (Vercel)
-Set environment variables in Vercel dashboard:
-- `CONTRACT_ADDRESS`: Deployed contract address
-- `SUBGRAPH_URL`: URL of your deployed subgraph endpoint
-- `NETWORK`: Target network (default: somnia-testnet)
+1. **Install dependencies**:
+   ```bash
+   npm install
+   ```
 
-## Network Configuration
+2. **Start the server**:
+   ```bash
+   npm start
+   ```
 
-The app is configured for mainnet by default. To use a different network:
+3. **Open your browser**:
+   - Counter: http://localhost:3000
+   - Leaderboard: http://localhost:3000/leaderboard
 
-1. Update the network in `subgraph/subgraph.yaml`
-2. Ensure your wallet is connected to the same network
-3. Update RPC endpoints if needed
+### Vercel Deployment
+
+1. **Connect your GitHub repository to Vercel**
+
+2. **Set environment variables in Vercel dashboard**:
+   ```
+   CONTRACT_ADDRESS=0x49E389D79401D404cd4FBA55CC831a8224A0C277
+   NETWORK=somnia-testnet
+   SUBGRAPH_URL=https://api.studio.thegraph.com/query/80513/somnia-counter/v0.0.1
+   NODE_ENV=production
+   ```
+
+3. **Deploy**:
+   ```bash
+   npm run deploy
+   ```
+
+## Project Structure
+
+```
+somnia-demo/
+├── api/
+│   └── index.js          # Vercel serverless function
+├── app.js                # Local development server
+├── public/               # Frontend static files
+│   ├── index.html        # Counter page
+│   ├── leaderboard.html  # Leaderboard page
+│   └── js/               # Client-side JavaScript
+├── contracts/            # Smart contracts
+├── subgraph/            # The Graph subgraph
+├── vercel.json          # Vercel configuration
+└── package.json         # Dependencies and scripts
+```
+
+## API Endpoints
+
+- `GET /` - Counter page
+- `GET /leaderboard` - Leaderboard page
+- `GET /api/health` - Health check
+- `GET /api/counter/:address` - Get user's counter value
+- `GET /api/leaderboard` - Get leaderboard data
+
+## Smart Contract
+
+The demo interacts with a Counter contract deployed on Somnia testnet:
+- **Address**: `0x49E389D79401D404cd4FBA55CC831a8224A0C277`
+- **Network**: Somnia Testnet
+- **Functions**: `increment()`, `getCounter(address)`
 
 ## Development
 
-- Use `npm run dev` for development with auto-restart
-- The frontend uses vanilla JavaScript with Web3.js for wallet interaction
-- Contract calls are made directly from the frontend
-- Data queries go through the subgraph for efficiency 
+### Scripts
+
+- `npm start` - Start local server
+- `npm run dev` - Start with nodemon (auto-reload)
+- `npm run build` - Build check (no build step required)
+- `npm run deploy` - Deploy to Vercel
+
+### Environment Variables
+
+For local development, copy `config.example.js` to `config.js` and customize as needed.
+
+For production deployment on Vercel, set these environment variables:
+- `CONTRACT_ADDRESS` - Smart contract address
+- `NETWORK` - Blockchain network name
+- `SUBGRAPH_URL` - The Graph subgraph endpoint
+- `NODE_ENV` - Environment (production)
+
+## Technologies
+
+- **Frontend**: HTML5, CSS3, Vanilla JavaScript, Web3.js
+- **Backend**: Node.js, Express.js
+- **Blockchain**: Somnia Network, Solidity
+- **Data**: The Graph Protocol
+- **Deployment**: Vercel (Serverless) 
