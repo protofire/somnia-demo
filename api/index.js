@@ -3,29 +3,30 @@ const cors = require('cors');
 const path = require('path');
 const axios = require('axios');
 
-// Load configuration
-const config = require('./config.example'); // Change to config.js when you create it
+// Load configuration (same as app.js for consistency)
+const config = require('../config.example'); // Change to ../config.js when you create it
 
 const app = express();
-const PORT = config.port;
 
-// Apply CORS configuration
+// Contract configuration from config (with env variable override for Vercel)
+const CONTRACT_ADDRESS = process.env.CONTRACT_ADDRESS || config.contractAddress;
+const SUBGRAPH_URL = process.env.SUBGRAPH_URL || config.subgraphUrl;
+const NETWORK = process.env.NETWORK || config.network;
+
+// CORS configuration
 app.use(cors(config.cors));
-app.use(express.json());
-app.use(express.static('public'));
 
-// Contract configuration from config
-const CONTRACT_ADDRESS = config.contractAddress;
-const SUBGRAPH_URL = config.subgraphUrl;
+app.use(express.json());
+app.use(express.static(path.join(__dirname, '../public')));
 
 // Serve the main counter page
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+    res.sendFile(path.join(__dirname, '../public', 'index.html'));
 });
 
 // Serve the leaderboard page
 app.get('/leaderboard', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'leaderboard.html'));
+    res.sendFile(path.join(__dirname, '../public', 'leaderboard.html'));
 });
 
 // API endpoint to get leaderboard data from subgraph
@@ -84,13 +85,9 @@ app.get('/api/health', (req, res) => {
         status: 'ok', 
         contractAddress: CONTRACT_ADDRESS,
         subgraphUrl: SUBGRAPH_URL,
-        network: config.network
+        network: NETWORK
     });
 });
 
-app.listen(PORT, () => {
-    console.log(`🚀 Server running at http://localhost:${PORT}`);
-    console.log(`📋 Contract Address: ${CONTRACT_ADDRESS}`);
-    console.log(`📊 Subgraph URL: ${SUBGRAPH_URL}`);
-    console.log(`🌐 Network: ${config.network}`);
-}); 
+// Export for Vercel
+module.exports = app; 
