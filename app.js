@@ -2,21 +2,44 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const axios = require('axios');
+const fs = require('fs');
 
-// Load configuration
-const config = require('./config.example'); // Change to config.js when you create it
+// Load configuration with fallback
+let config;
+try {
+    // Try to load config.js first
+    if (fs.existsSync('./config.js')) {
+        config = require('./config.js');
+    } else {
+        // Fall back to config.example.js
+        config = require('./config.example.js');
+        console.log('⚠️  Using config.example.js - Please copy it to config.js and customize as needed');
+    }
+} catch (error) {
+    console.error('❌ Error loading configuration:', error.message);
+    process.exit(1);
+}
 
 const app = express();
-const PORT = config.port;
 
-// Apply CORS configuration
-app.use(cors(config.cors));
+// Use environment variables for production (Vercel) or config file for local development
+const CONTRACT_ADDRESS = process.env.CONTRACT_ADDRESS || config.contractAddress;
+const SUBGRAPH_URL = process.env.SUBGRAPH_URL || config.subgraphUrl;
+const NETWORK = process.env.NETWORK || config.network;
+const PORT = process.env.PORT || config.port;
+
+// CORS configuration - support both local development and production
+const corsOrigins = process.env.NODE_ENV === 'production' 
+    ? ['https://*.vercel.app', 'https://*.somnia.network']
+    : ['http://localhost:3000', 'http://127.0.0.1:3000'];
+
+app.use(cors({
+    origin: corsOrigins,
+    credentials: true
+}));
+
 app.use(express.json());
 app.use(express.static('public'));
-
-// Contract configuration from config
-const CONTRACT_ADDRESS = config.contractAddress;
-const SUBGRAPH_URL = config.subgraphUrl;
 
 // Serve the main counter page
 app.get('/', (req, res) => {
@@ -84,13 +107,21 @@ app.get('/api/health', (req, res) => {
         status: 'ok', 
         contractAddress: CONTRACT_ADDRESS,
         subgraphUrl: SUBGRAPH_URL,
-        network: config.network
+        network: NETWORK,
+        environment: process.env.NODE_ENV || 'development'
     });
 });
 
-app.listen(PORT, () => {
-    console.log(`🚀 Server running at http://localhost:${PORT}`);
-    console.log(`📋 Contract Address: ${CONTRACT_ADDRESS}`);
-    console.log(`📊 Subgraph URL: ${SUBGRAPH_URL}`);
-    console.log(`🌐 Network: ${config.network}`);
-}); 
+// Only start server if not in serverless environment (Vercel)
+if (!process.env.VERCEL) {
+    app.listen(PORT, () => {
+        console.log(`🚀 Server running at http://localhost:${PORT}`);
+        console.log(`📋 Contract Address: ${CONTRACT_ADDRESS}`);
+        console.log(`📊 Subgraph URL: ${SUBGRAPH_URL}`);
+        console.log(`🌐 Network: ${NETWORK}`);
+        console.log(`🔧 Environment: ${process.env.NODE_ENV || 'development'}`);
+    });
+}
+
+// Export for Vercel deployment
+module.exports = app; 
