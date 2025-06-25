@@ -12,7 +12,7 @@ module.exports = {
     contractAddress: '0x56eb32579d0de82027bFD0351ac954088D66C98A',
     
     // Subgraph configuration
-    subgraphUrl: 'https://proxy.somnia.chain.love/subgraphs/name/somnia-testnet/demo',
+    subgraphUrl: 'https://proxy.somnia.chain.love/subgraphs/name/somnia-testnet/counter',
     
     // CORS configuration
     cors: {
