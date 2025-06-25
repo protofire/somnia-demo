@@ -9,7 +9,7 @@ module.exports = {
     network: 'somnia-testnet',
     
     // Contract configuration
-    contractAddress: '0x49E389D79401D404cd4FBA55CC831a8224A0C277',
+    contractAddress: '0x56eb32579d0de82027bFD0351ac954088D66C98A',
     
     // Subgraph configuration
     subgraphUrl: 'https://proxy.somnia.chain.love/subgraphs/name/somnia-testnet/demo',

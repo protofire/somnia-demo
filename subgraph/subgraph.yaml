@@ -25,9 +25,9 @@ dataSources:
     
     # Smart Contract Details
     source:
-      address: "0x49E389D79401D404cd4FBA55CC831a8224A0C277"  # The deployed Counter contract address
+      address: "0x56eb32579d0de82027bFD0351ac954088D66C98A"  # The deployed Counter contract address
       abi: Counter                   # Reference to the ABI (Application Binary Interface)
-      startBlock: 106473529          # Block number where indexing should start (when contract was deployed)
+      startBlock: 107351838          # Block number where indexing should start (when contract was deployed)
     
     # Mapping Configuration
     # This section tells the subgraph how to process blockchain events

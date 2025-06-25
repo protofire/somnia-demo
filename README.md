@@ -34,7 +34,7 @@ A simple counter demo application with wallet integration, built for the Somnia 
 
 2. **Set environment variables in Vercel dashboard**:
    ```
-   CONTRACT_ADDRESS=0x49E389D79401D404cd4FBA55CC831a8224A0C277
+   CONTRACT_ADDRESS=0x56eb32579d0de82027bFD0351ac954088D66C98A
    NETWORK=somnia-testnet
    SUBGRAPH_URL=https://api.studio.thegraph.com/query/80513/somnia-counter/v0.0.1
    NODE_ENV=production
@@ -73,7 +73,7 @@ somnia-demo/
 ## Smart Contract
 
 The demo interacts with a Counter contract deployed on Somnia testnet:
-- **Address**: `0x49E389D79401D404cd4FBA55CC831a8224A0C277`
+- **Address**: `0x56eb32579d0de82027bFD0351ac954088D66C98A`
 - **Network**: Somnia Testnet
 - **Functions**: `increment()`, `getCounter(address)`
 

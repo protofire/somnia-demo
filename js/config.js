@@ -7,7 +7,7 @@
 
 const CONFIG = {
     // Contract configuration
-    "CONTRACT_ADDRESS": "0x49E389D79401D404cd4FBA55CC831a8224A0C277",
+    "CONTRACT_ADDRESS": "0x56eb32579d0de82027bFD0351ac954088D66C98A",
     "NETWORK": "somnia-testnet",
     
     // API configuration - use relative URLs so it works with any deployment
